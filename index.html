@@ -116,6 +116,19 @@
   <footer>
     <p>© SentioAurum</p>
   </footer>
+<script>
+  const domainField = document.getElementById("domainField");
+  const buttons = document.querySelectorAll("button[data-domain]");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const domain = btn.getAttribute("data-domain");
+      domainField.value = domain;
+      document.getElementById("inquire").scrollIntoView({ behavior: "smooth" });
+      domainField.focus();
+    });
+  });
+</script>
 
 </body>
 </html>
