@@ -22,10 +22,15 @@ header p {
 }
 
 section {
-  padding: 30px 20px;
-  max-width: 800px;
+  padding: 36px 20px;
+  max-width: 760px;
   margin: auto;
 }
+
+.intro {
+  max-width: 640px;
+}
+
 
 .domains h2,
 .contact h2 {
@@ -55,6 +60,15 @@ section {
 
 .contact {
   text-align: center;
+}
+.contact {
+  margin-top: 40px;
+  padding-top: 36px;
+  border-top: 1px solid #222;
+}
+
+.contact h2 {
+  margin-bottom: 8px;
 }
 
 .note {
@@ -130,4 +144,22 @@ footer {
   padding: 8px 12px;
   border-radius: 10px;
   width: fit-content;
+}
+.inquiry-form {
+  max-width: 520px;
+  margin: 24px auto 0 auto;
+}
+
+.inquiry-form label {
+  font-size: 13px;
+}
+
+.inquiry-form input,
+.inquiry-form select,
+.inquiry-form textarea {
+  font-size: 15px;
+}
+h2 {
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
