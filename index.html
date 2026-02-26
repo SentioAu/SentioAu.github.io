@@ -11,19 +11,20 @@
   <meta property="og:description" content="Acquire premium domains and explore ventures built by SentioAurum." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://sentioaurum.com" />
-  <meta property="og:image" content="https://sentioaurum.com/og-image.jpg" />
+  <meta property="og:image" content="https://sentioaurum.com/og-image.svg" />
+  <meta property="og:image:type" content="image/svg+xml" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="SentioAurum | Premium Domains & Digital Ventures" />
   <meta name="twitter:description" content="Acquire premium domains and explore ventures built by SentioAurum." />
-  <meta name="twitter:image" content="https://sentioaurum.com/og-image.jpg" />
+  <meta name="twitter:image" content="https://sentioaurum.com/og-image.svg" />
+  <meta name="twitter:image:alt" content="SentioAurum premium domains and digital ventures" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VBQJ0Q5J39"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -54,19 +55,19 @@
           <h1>Professional domain portfolio for founders, operators, and investors.</h1>
           <p class="hero-copy">
             SentioAurum curates high-conviction brand domains and builds focused web products.
-            Acquire naming assets with confidence and discover ventures already shipped by our team.
+            Browse names, select your target domain, and send a direct acquisition inquiry.
           </p>
           <div class="hero-actions">
-            <a class="btn" href="#domains">Explore Featured Domains</a>
+            <a class="btn" href="#domains">Explore Domains</a>
             <a class="btn btn-ghost" href="#projects">See Built Projects</a>
           </div>
         </div>
         <aside class="hero-panel">
           <p class="panel-title">Why buyers work with us</p>
           <ul>
-            <li>Transparent pricing and negotiation process</li>
+            <li>Clear, direct communication with fast response times</li>
             <li>Secure transfer via trusted escrow rails</li>
-            <li>Fast response for serious acquisition inquiries</li>
+            <li>Premium naming focus for serious builders</li>
           </ul>
         </aside>
       </div>
@@ -75,68 +76,24 @@
     <section class="section" id="domains">
       <div class="container">
         <div class="section-head">
-          <h2>Featured Domains For Sale</h2>
-          <p>Selected premium names from the SentioAurum collection. For the full inventory and updates, visit our Atom portfolio.</p>
+          <h2>Featured Domains For Acquisition</h2>
+          <p>Private pricing by request. Select your domain and submit your preferred offer.</p>
         </div>
 
-        <div class="domain-grid">
-          <article class="card domain-card">
-            <h3>Entte.com</h3>
-            <p>Short, crisp brand for SaaS, fintech, or venture-backed consumer products.</p>
-            <div class="domain-meta">
-              <span class="price">$5,500</span>
-              <button class="btn small" data-domain="Entte.com">Inquire</button>
-            </div>
-          </article>
+        <div class="policy-strip" role="note">Serious offers only: inquiries below <strong>$2,500</strong> are typically not prioritized.</div>
 
-          <article class="card domain-card">
-            <h3>TheHiveAI.com</h3>
-            <p>Strong positioning for AI orchestration, intelligence tooling, or analytics platforms.</p>
-            <div class="domain-meta">
-              <span class="price">$6,500</span>
-              <button class="btn small" data-domain="TheHiveAI.com">Inquire</button>
-            </div>
-          </article>
+        <div class="domain-grid" id="domainGrid"></div>
 
-          <article class="card domain-card">
-            <h3>FeedLM.com</h3>
-            <p>Memorable fit for language model products, developer APIs, or data-centric AI tools.</p>
-            <div class="domain-meta">
-              <span class="price">$4,500</span>
-              <button class="btn small" data-domain="FeedLM.com">Inquire</button>
-            </div>
-          </article>
-
-          <article class="card domain-card">
-            <h3>Riyadhly.com</h3>
-            <p>High-potential geo brand for city media, travel, local commerce, or lifestyle platforms.</p>
-            <div class="domain-meta">
-              <span class="price">$12,500</span>
-              <button class="btn small" data-domain="Riyadhly.com">Inquire</button>
-            </div>
-          </article>
-        </div>
-
-        <article class="card inventory-table-wrap" aria-labelledby="all-domains-heading">
-          <h3 id="all-domains-heading">Quick Browse: Additional Domains</h3>
-          <div class="table-scroll">
-            <table class="inventory-table">
-              <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Entte.com</td><td>Brandable SaaS</td><td>$5,500</td></tr>
-                <tr><td>TheHiveAI.com</td><td>AI / Data</td><td>$6,500</td></tr>
-                <tr><td>FeedLM.com</td><td>AI / Developer Tools</td><td>$4,500</td></tr>
-                <tr><td>Riyadhly.com</td><td>Geo / Media</td><td>$12,500</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="section-footnote">Need the full inventory? <a class="track-atom" href="https://www.atom.com/domain-portfolio/giovannibb514/2793290" target="_blank" rel="noopener noreferrer">Browse all domains on Atom</a>.</p>
+        <article class="card inventory-select-wrap" aria-labelledby="all-domains-heading">
+          <h3 id="all-domains-heading">All Listed Domains (Auto-synced JSON)</h3>
+          <p class="inventory-copy">This selector is populated from <code>domains.json</code> so updates stay centralized.</p>
+          <label class="domain-picker-label" for="domainPicker">
+            Domain portfolio selector
+            <select id="domainPicker" class="domain-picker" name="domain_picker">
+              <option value="" selected>Select a domain</option>
+            </select>
+          </label>
+          <p class="section-footnote">Need the full live portfolio list? <a class="track-atom" href="https://www.atom.com/domain-portfolio/giovannibb514/2793290" target="_blank" rel="noopener noreferrer">Browse all domains on Atom</a>.</p>
         </article>
       </div>
     </section>
@@ -151,17 +108,17 @@
           <article class="card process-card">
             <span class="process-step">01</span>
             <h3>Submit Inquiry</h3>
-            <p>Share domain interest, budget, and intended use. We qualify and respond quickly.</p>
+            <p>Share your target domain, offer range, and intended use case.</p>
           </article>
           <article class="card process-card">
             <span class="process-step">02</span>
             <h3>Agree Terms</h3>
-            <p>Finalize pricing and transfer terms with transparent communication.</p>
+            <p>We align on transaction terms and practical transfer timeline.</p>
           </article>
           <article class="card process-card">
             <span class="process-step">03</span>
             <h3>Escrow & Transfer</h3>
-            <p>Complete a secure escrow transaction and transfer domain ownership safely.</p>
+            <p>Secure escrow flow and controlled domain ownership transfer.</p>
           </article>
         </div>
       </div>
@@ -190,6 +147,20 @@
       </div>
     </section>
 
+    <section class="section section-alt" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <h2>Frequently Asked Questions</h2>
+          <p>Quick answers for buyers evaluating acquisition.</p>
+        </div>
+        <div class="faq-grid">
+          <article class="card faq-card"><h3>How fast can transfer happen?</h3><p>Most transfers complete within 24–72 hours after escrow is funded and terms are finalized.</p></article>
+          <article class="card faq-card"><h3>Which escrow rails are used?</h3><p>We use established third-party escrow workflows to protect both buyer and seller throughout transfer.</p></article>
+          <article class="card faq-card"><h3>Can I submit an offer instead of buy-now?</h3><p>Yes. Use “Make offer” in the inquiry form and include your intended budget and timeline.</p></article>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="inquire">
       <div class="container contact-wrap">
         <div class="section-head">
@@ -202,8 +173,8 @@
 
         <div class="trust-strip" aria-label="Trust signals">
           <div class="trust-item">
-            <strong>50+ Premium Assets</strong>
-            <span>Curated for startups and operators</span>
+            <strong>Curated Premium Portfolio</strong>
+            <span>Focused selection for founders and operators</span>
           </div>
           <div class="trust-item">
             <strong>Secure Escrow Transfers</strong>
@@ -216,14 +187,60 @@
         </div>
 
         <form class="inquiry-form" id="inquiryForm" action="https://formspree.io/f/xdannogb" method="POST">
+          <input type="hidden" name="_next" value="https://sentioaurum.com/thank-you.html" />
+
           <label>
             Domain
-            <input id="domainField" name="domain" type="text" placeholder="e.g., Entte.com" required />
+            <select id="domainField" name="domain" required>
+              <option value="" selected disabled>Select a domain</option>
+            </select>
+          </label>
+
+          <label>
+            Offer intent
+            <select name="offer_intent" id="offerIntent" required>
+              <option value="" selected disabled>Select intent</option>
+              <option>Buy now</option>
+              <option>Lease-to-own</option>
+              <option>Make offer</option>
+            </select>
+          </label>
+
+          <label>
+            Decision authority
+            <select name="decision_authority" required>
+              <option value="" selected disabled>Select authority</option>
+              <option>Founder / Owner</option>
+              <option>Marketing lead</option>
+              <option>Broker / Representative</option>
+              <option>Other</option>
+            </select>
+          </label>
+
+          <label>
+            Timeline to close
+            <select name="timeline_to_close" required>
+              <option value="" selected disabled>Select timeline</option>
+              <option>This week</option>
+              <option>Within 30 days</option>
+              <option>Within 90 days</option>
+              <option>Research phase</option>
+            </select>
+          </label>
+
+          <label>
+            Preferred contact method
+            <select name="preferred_contact" required>
+              <option value="" selected disabled>Select contact method</option>
+              <option>Email</option>
+              <option>Telegram</option>
+              <option>WhatsApp</option>
+            </select>
           </label>
 
           <label>
             Your email
-            <input name="email" type="email" placeholder="you@company.com" required />
+            <input name="email" type="email" id="emailField" placeholder="you@company.com" required />
           </label>
 
           <label>
@@ -250,7 +267,7 @@
 
           <label>
             Budget range (USD)
-            <select name="budget" required>
+            <select name="budget" id="budgetField" required>
               <option value="" selected disabled>Select a range</option>
               <option>$1,000–$2,500</option>
               <option>$2,500–$5,000</option>
@@ -282,9 +299,13 @@
   </footer>
 
   <script>
+    const domainGrid = document.getElementById('domainGrid');
     const domainField = document.getElementById('domainField');
-    const buttons = document.querySelectorAll('button[data-domain]');
+    const domainPicker = document.getElementById('domainPicker');
     const inquiryForm = document.getElementById('inquiryForm');
+    const offerIntent = document.getElementById('offerIntent');
+    const budgetField = document.getElementById('budgetField');
+    const emailField = document.getElementById('emailField');
 
     const trackEvent = (name, params = {}) => {
       if (typeof gtag === 'function') {
@@ -292,22 +313,81 @@
       }
     };
 
-    buttons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const domain = button.getAttribute('data-domain');
-        domainField.value = domain;
-        document.getElementById('inquire').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        domainField.focus();
-        trackEvent('click_inquire_button', {
-          domain_name: domain,
-          source_section: 'featured_domains'
-        });
+    const optionMarkup = (domain) => `<option value="${domain}">${domain}</option>`;
+
+    const setDomainSelection = (domain) => {
+      domainField.value = domain;
+      domainPicker.value = domain;
+    };
+
+    const requiredFields = [domainField, offerIntent, budgetField, emailField];
+    let formStarted = false;
+
+    requiredFields.forEach((field) => {
+      field.addEventListener('focus', () => {
+        if (!formStarted) {
+          formStarted = true;
+          trackEvent('form_start', { form_name: 'inquiry_form' });
+        }
       });
+    });
+
+    fetch('domains.json')
+      .then((response) => response.json())
+      .then((domains) => {
+        const featuredDomains = domains.filter((item) => item.featured);
+
+        domainGrid.innerHTML = featuredDomains.map((item) => `
+          <article class="card domain-card">
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+            <button class="btn small" data-domain="${item.name}">Inquire</button>
+          </article>
+        `).join('');
+
+        const allOptions = domains.map((item) => optionMarkup(item.name)).join('');
+        domainField.insertAdjacentHTML('beforeend', allOptions);
+        domainPicker.insertAdjacentHTML('beforeend', allOptions);
+
+        document.querySelectorAll('button[data-domain]').forEach((button) => {
+          button.addEventListener('click', () => {
+            const domain = button.getAttribute('data-domain');
+            setDomainSelection(domain);
+            document.getElementById('inquire').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            domainField.focus();
+            trackEvent('domain_select', {
+              domain_name: domain,
+              source_section: 'featured_domains'
+            });
+          });
+        });
+      })
+      .catch(() => {
+        domainGrid.innerHTML = '<article class="card domain-card"><h3>Domain list unavailable</h3><p>Please use the full Atom portfolio link while we refresh inventory sync.</p></article>';
+      });
+
+    domainPicker.addEventListener('change', () => {
+      const selectedDomain = domainPicker.value;
+      if (!selectedDomain) {
+        return;
+      }
+      setDomainSelection(selectedDomain);
+      document.getElementById('inquire').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      trackEvent('domain_select', {
+        domain_name: selectedDomain,
+        source_section: 'domain_selector'
+      });
+    });
+
+    domainField.addEventListener('change', () => {
+      if (domainField.value) {
+        domainPicker.value = domainField.value;
+      }
     });
 
     document.querySelectorAll('.track-project').forEach((link) => {
       link.addEventListener('click', () => {
-        trackEvent('click_project_link', {
+        trackEvent('project_click', {
           project_url: link.href,
           source_section: 'projects'
         });
@@ -316,15 +396,26 @@
 
     document.querySelectorAll('.track-atom').forEach((link) => {
       link.addEventListener('click', () => {
-        trackEvent('click_atom_portfolio', {
+        trackEvent('portfolio_click', {
           destination: link.href
         });
       });
     });
 
-    inquiryForm.addEventListener('submit', () => {
-      trackEvent('submit_inquiry', {
-        selected_domain: domainField.value || 'not_selected'
+    inquiryForm.addEventListener('submit', (event) => {
+      const missing = requiredFields.filter((field) => !field.value);
+      if (missing.length > 0) {
+        trackEvent('form_error', {
+          form_name: 'inquiry_form',
+          missing_count: missing.length
+        });
+        return;
+      }
+
+      trackEvent('inquiry_submit', {
+        domain_name: domainField.value || 'not_selected',
+        offer_intent: offerIntent.value || 'not_selected',
+        budget_range: budgetField.value || 'not_selected'
       });
     });
 

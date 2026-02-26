@@ -186,44 +186,50 @@ h1 {
   color: var(--muted);
 }
 
-.domain-meta {
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.price {
-  font-weight: 700;
-  color: var(--text);
-}
-
-.inventory-table-wrap {
+.domain-card .btn {
   margin-top: 16px;
 }
 
-.table-scroll {
-  overflow-x: auto;
-}
 
-.inventory-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-}
-
-.inventory-table th,
-.inventory-table td {
-  text-align: left;
-  padding: 10px 8px;
-  border-bottom: 1px solid rgba(156, 195, 255, 0.16);
+.policy-strip {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(127, 176, 255, 0.08);
   color: var(--muted);
 }
 
-.inventory-table th {
-  color: var(--text);
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.inventory-select-wrap {
+  margin-top: 16px;
+}
+
+.inventory-copy {
+  color: var(--muted);
+}
+
+.domain-picker-label {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
   font-weight: 600;
+}
+
+.domain-picker {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--text);
+  font: inherit;
+  padding: 11px 12px;
 }
 
 .section-footnote {
@@ -336,7 +342,8 @@ h1 {
 
 .inquiry-form input:focus,
 .inquiry-form select:focus,
-.inquiry-form textarea:focus {
+.inquiry-form textarea:focus,
+.domain-picker:focus {
   outline: 1px solid var(--brand);
   border-color: var(--brand);
 }
@@ -374,7 +381,8 @@ footer {
   .domain-grid,
   .project-grid,
   .process-grid,
-  .trust-strip {
+  .trust-strip,
+  .faq-grid {
     grid-template-columns: 1fr;
   }
 

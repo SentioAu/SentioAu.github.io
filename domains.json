@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Entte.com",
+    "category": "Brandable SaaS",
+    "description": "Short, crisp brand for SaaS, fintech, or venture-backed consumer products.",
+    "featured": true
+  },
+  {
+    "name": "TheHiveAI.com",
+    "category": "AI / Data",
+    "description": "Strong positioning for AI orchestration, intelligence tooling, or analytics platforms.",
+    "featured": true
+  },
+  {
+    "name": "FeedLM.com",
+    "category": "AI / Developer Tools",
+    "description": "Memorable fit for language model products, developer APIs, or data-centric AI tools.",
+    "featured": true
+  },
+  {
+    "name": "Riyadhly.com",
+    "category": "Geo / Media",
+    "description": "High-potential geo brand for city media, travel, local commerce, or lifestyle platforms.",
+    "featured": true
+  }
+]
