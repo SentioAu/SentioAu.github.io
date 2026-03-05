@@ -1,0 +1,19 @@
+name: Validate inventory sync
+
+on:
+  pull_request:
+  push:
+    branches: [ "main", "work" ]
+
+jobs:
+  inventory-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Regenerate domains.json
+        run: python sync_domains.py
+      - name: Ensure domains.json is up to date
+        run: git diff --exit-code domains.json
