@@ -77,16 +77,31 @@
       <div class="container">
         <div class="section-head">
           <h2>Featured Domains For Acquisition</h2>
-          <p>Private pricing by request. Select your domain and submit your preferred offer.</p>
+          <p>Private pricing by request. Featured picks rotate on every refresh—select your domain and submit your preferred offer.</p>
         </div>
 
         <div class="policy-strip" role="note">Serious offers only: inquiries below <strong>$2,500</strong> are typically not prioritized.</div>
 
-        <div class="domain-grid" id="domainGrid"></div>
+        <div class="filter-row" id="filterRow" aria-label="Domain category filters"></div>
+
+        <div class="domain-grid" id="domainGrid" aria-live="polite"></div>
+
+        <div class="shortlist-bar" id="shortlistBar">
+          <p><strong>Shortlist:</strong> <span id="shortlistText">No domains selected yet.</span></p>
+          <div class="shortlist-actions">
+            <button class="btn small" id="inquireShortlistBtn" type="button">Inquire for shortlist</button>
+            <button class="btn btn-ghost small" id="clearShortlistBtn" type="button">Clear shortlist</button>
+          </div>
+        </div>
 
         <article class="card inventory-select-wrap" aria-labelledby="all-domains-heading">
           <h3 id="all-domains-heading">All Listed Domains (Auto-synced JSON)</h3>
-          <p class="inventory-copy">This selector is populated from <code>domains.json</code> so updates stay centralized.</p>
+          <p class="inventory-copy">Select any domain below to prefill your inquiry form.</p>
+          <label class="domain-picker-label" for="domainSearch">
+            Search domains
+            <input id="domainSearch" class="domain-picker" type="text" placeholder="Type to filter domains..." />
+            <span class="search-hint" id="domainSearchHint">Showing all domains.</span>
+          </label>
           <label class="domain-picker-label" for="domainPicker">
             Domain portfolio selector
             <select id="domainPicker" class="domain-picker" name="domain_picker">
@@ -188,6 +203,7 @@
 
         <form class="inquiry-form" id="inquiryForm" action="https://formspree.io/f/xdannogb" method="POST">
           <input type="hidden" name="_next" value="https://sentioaurum.com/thank-you.html" />
+          <input type="hidden" name="shortlist" id="shortlistInput" />
 
           <label>
             Domain
@@ -298,128 +314,9 @@
     </div>
   </footer>
 
-  <script>
-    const domainGrid = document.getElementById('domainGrid');
-    const domainField = document.getElementById('domainField');
-    const domainPicker = document.getElementById('domainPicker');
-    const inquiryForm = document.getElementById('inquiryForm');
-    const offerIntent = document.getElementById('offerIntent');
-    const budgetField = document.getElementById('budgetField');
-    const emailField = document.getElementById('emailField');
+      <script src="app.js" defer></script>
 
-    const trackEvent = (name, params = {}) => {
-      if (typeof gtag === 'function') {
-        gtag('event', name, params);
-      }
-    };
 
-    const optionMarkup = (domain) => `<option value="${domain}">${domain}</option>`;
 
-    const setDomainSelection = (domain) => {
-      domainField.value = domain;
-      domainPicker.value = domain;
-    };
-
-    const requiredFields = [domainField, offerIntent, budgetField, emailField];
-    let formStarted = false;
-
-    requiredFields.forEach((field) => {
-      field.addEventListener('focus', () => {
-        if (!formStarted) {
-          formStarted = true;
-          trackEvent('form_start', { form_name: 'inquiry_form' });
-        }
-      });
-    });
-
-    fetch('domains.json')
-      .then((response) => response.json())
-      .then((domains) => {
-        const featuredDomains = domains.filter((item) => item.featured);
-
-        domainGrid.innerHTML = featuredDomains.map((item) => `
-          <article class="card domain-card">
-            <h3>${item.name}</h3>
-            <p>${item.description}</p>
-            <button class="btn small" data-domain="${item.name}">Inquire</button>
-          </article>
-        `).join('');
-
-        const allOptions = domains.map((item) => optionMarkup(item.name)).join('');
-        domainField.insertAdjacentHTML('beforeend', allOptions);
-        domainPicker.insertAdjacentHTML('beforeend', allOptions);
-
-        document.querySelectorAll('button[data-domain]').forEach((button) => {
-          button.addEventListener('click', () => {
-            const domain = button.getAttribute('data-domain');
-            setDomainSelection(domain);
-            document.getElementById('inquire').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            domainField.focus();
-            trackEvent('domain_select', {
-              domain_name: domain,
-              source_section: 'featured_domains'
-            });
-          });
-        });
-      })
-      .catch(() => {
-        domainGrid.innerHTML = '<article class="card domain-card"><h3>Domain list unavailable</h3><p>Please use the full Atom portfolio link while we refresh inventory sync.</p></article>';
-      });
-
-    domainPicker.addEventListener('change', () => {
-      const selectedDomain = domainPicker.value;
-      if (!selectedDomain) {
-        return;
-      }
-      setDomainSelection(selectedDomain);
-      document.getElementById('inquire').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      trackEvent('domain_select', {
-        domain_name: selectedDomain,
-        source_section: 'domain_selector'
-      });
-    });
-
-    domainField.addEventListener('change', () => {
-      if (domainField.value) {
-        domainPicker.value = domainField.value;
-      }
-    });
-
-    document.querySelectorAll('.track-project').forEach((link) => {
-      link.addEventListener('click', () => {
-        trackEvent('project_click', {
-          project_url: link.href,
-          source_section: 'projects'
-        });
-      });
-    });
-
-    document.querySelectorAll('.track-atom').forEach((link) => {
-      link.addEventListener('click', () => {
-        trackEvent('portfolio_click', {
-          destination: link.href
-        });
-      });
-    });
-
-    inquiryForm.addEventListener('submit', (event) => {
-      const missing = requiredFields.filter((field) => !field.value);
-      if (missing.length > 0) {
-        trackEvent('form_error', {
-          form_name: 'inquiry_form',
-          missing_count: missing.length
-        });
-        return;
-      }
-
-      trackEvent('inquiry_submit', {
-        domain_name: domainField.value || 'not_selected',
-        offer_intent: offerIntent.value || 'not_selected',
-        budget_range: budgetField.value || 'not_selected'
-      });
-    });
-
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
