@@ -33,10 +33,19 @@ const DOMAIN_BRIEFS = {
       'thehiveai.com': '/domains/thehiveai-com.html'
     };
 
-    const shuffle = (items) => {
+    const weeklySeed = () => {
+      const now = new Date();
+      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+      const dayOfYear = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - startOfYear.getTime()) / 86400000);
+      return now.getUTCFullYear() * 100 + Math.floor(dayOfYear / 7);
+    };
+
+    const seededShuffle = (items, seed) => {
       const arr = [...items];
+      let state = seed || 1;
       for (let i = arr.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
+        state = (state * 1664525 + 1013904223) % 4294967296;
+        const j = state % (i + 1);
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr;
@@ -151,10 +160,18 @@ const DOMAIN_BRIEFS = {
       });
     };
 
+    const pickFeaturedSet = (pool) => {
+      const seed = weeklySeed();
+      const featured = pool.filter((item) => item.featured === true);
+      const rest = pool.filter((item) => item.featured !== true);
+      const ordered = [...seededShuffle(featured, seed), ...seededShuffle(rest, seed + 1)];
+      return ordered.slice(0, 4);
+    };
+
     const renderFeaturedDomains = () => {
       const filtered = getFilteredDomains();
       const source = filtered.length > 0 ? filtered : allDomains;
-      const rotatedDomains = shuffle(source).slice(0, 4);
+      const rotatedDomains = pickFeaturedSet(source);
 
       domainGrid.innerHTML = rotatedDomains.map((item) => {
         const description = item.description && item.description.trim().length > 0
