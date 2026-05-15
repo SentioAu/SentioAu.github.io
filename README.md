@@ -42,5 +42,10 @@ This keeps the portfolio list synchronized without manually editing `index.html`
 
 ## CI inventory guardrail
 
-- GitHub Actions workflow `validate-inventory.yml` regenerates `domains.json` and fails if it is out-of-sync with `domains.csv`.
-- This prevents stale inventory JSON from being merged.
+- GitHub Actions workflow `validate-inventory.yml` regenerates `domains.json`, `sitemap.xml`, and `robots.txt`, then fails if any of them are out-of-sync with `domains.csv` or the contents of `domains/`.
+- This prevents stale inventory JSON or stale SEO artifacts from being merged.
+
+## SEO artifacts
+
+- `sitemap.xml` is generated from `domains.csv` and includes the homepage, `thank-you.html`, and every brief page that exists under `domains/`. Re-run `python sync_domains.py` after adding or removing briefs.
+- `robots.txt` references the sitemap at `https://sentioaurum.com/sitemap.xml`.
