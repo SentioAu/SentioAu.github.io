@@ -21,22 +21,21 @@
 
     const optionMarkup = (domain) => `<option value="${domain}">${domain}</option>`;
 
-const DOMAIN_BRIEFS = {
-      'cryptoguide.ai': '/domains/cryptoguide-ai.html',
-      'snuggle.ai': '/domains/snuggle-ai.html',
-      'advantech.ai': '/domains/advantech-ai.html',
-      'hunted.ai': '/domains/hunted-ai.html',
-      'nub.ai': '/domains/nub-ai.html',
-      'dragonfall.com': '/domains/dragonfall-com.html',
-      'witchingly.com': '/domains/witchingly-com.html',
-      'chesscourse.com': '/domains/chesscourse-com.html',
-      'thehiveai.com': '/domains/thehiveai-com.html'
+    const briefUrlFor = (name) => `/domains/${name.toLowerCase().replace(/\./g, '-')}.html`;
+
+    const weeklySeed = () => {
+      const now = new Date();
+      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+      const dayOfYear = Math.floor((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) - startOfYear.getTime()) / 86400000);
+      return now.getUTCFullYear() * 100 + Math.floor(dayOfYear / 7);
     };
 
-    const shuffle = (items) => {
+    const seededShuffle = (items, seed) => {
       const arr = [...items];
+      let state = seed || 1;
       for (let i = arr.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
+        state = (state * 1664525 + 1013904223) % 4294967296;
+        const j = state % (i + 1);
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr;
@@ -151,19 +150,24 @@ const DOMAIN_BRIEFS = {
       });
     };
 
+    const pickFeaturedSet = (pool) => {
+      const seed = weeklySeed();
+      const featured = pool.filter((item) => item.featured === true);
+      const rest = pool.filter((item) => item.featured !== true);
+      const ordered = [...seededShuffle(featured, seed), ...seededShuffle(rest, seed + 1)];
+      return ordered.slice(0, 4);
+    };
+
     const renderFeaturedDomains = () => {
       const filtered = getFilteredDomains();
       const source = filtered.length > 0 ? filtered : allDomains;
-      const rotatedDomains = shuffle(source).slice(0, 4);
+      const rotatedDomains = pickFeaturedSet(source);
 
       domainGrid.innerHTML = rotatedDomains.map((item) => {
         const description = item.description && item.description.trim().length > 0
           ? item.description
           : `${item.name} is available in the SentioAurum portfolio.`;
-        const briefUrl = DOMAIN_BRIEFS[item.name.toLowerCase()];
-        const briefLink = briefUrl
-          ? `<a class="brief-link" data-domain="${item.name}" href="${briefUrl}">View domain brief →</a>`
-          : '';
+        const briefLink = `<a class="brief-link" data-domain="${item.name}" href="${briefUrlFor(item.name)}">View domain brief →</a>`;
         return `
           <article class="card domain-card">
             <h3>${item.name}</h3>

@@ -30,8 +30,9 @@ This keeps the portfolio list synchronized without manually editing `index.html`
 
 ## Dedicated domain briefs
 
-- Domain-specific brief pages live in `domains/` and are automatically linked in featured cards when a mapping exists in `app.js` (`DOMAIN_BRIEFS`).
-- Current phase-2 briefs include select `.ai` domains plus `Dragonfall.com`, `Witchingly.com`, `ChessCourse.com`, and `TheHiveAi.com`.
+- Brief pages in `domains/` are generated for every entry in `domains.csv` by `sync_domains.py`. Each page includes JSON-LD `Product` + `Offer` schema for SEO indexing.
+- Slug pattern is `name.lower().replace('.', '-') + '.html'` (e.g. `cryptoguide-ai.html`). The homepage derives this URL on the fly via `briefUrlFor` in `app.js` — no manual mapping needed.
+- Stale brief files (i.e. ones whose domain no longer appears in the CSV) are deleted automatically on the next `python sync_domains.py` run, and CI fails if `domains/` is out-of-sync with the CSV.
 
 
 ### Metadata quality (Phase C)
@@ -42,5 +43,11 @@ This keeps the portfolio list synchronized without manually editing `index.html`
 
 ## CI inventory guardrail
 
-- GitHub Actions workflow `validate-inventory.yml` regenerates `domains.json` and fails if it is out-of-sync with `domains.csv`.
-- This prevents stale inventory JSON from being merged.
+- GitHub Actions workflow `validate-inventory.yml` regenerates `domains.json`, `sitemap.xml`, and `robots.txt`, then fails if any of them are out-of-sync with `domains.csv` or the contents of `domains/`.
+- This prevents stale inventory JSON or stale SEO artifacts from being merged.
+
+## SEO artifacts
+
+- `sitemap.xml` is generated from `domains.csv` and includes the homepage, `thank-you.html`, and every brief page under `domains/` (one per CSV row).
+- `robots.txt` references the sitemap at `https://sentioaurum.com/sitemap.xml`.
+- `og-image.png` is the canonical social preview asset (1200×630). Re-render with `python build_og_image.py` if the design changes.
