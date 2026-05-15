@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Build domains.json, sitemap.xml, and robots.txt from domains.csv."""
+"""Build domains.json, brief pages, sitemap.xml, and robots.txt from domains.csv."""
 from __future__ import annotations
 
 import csv
+import html
 import json
 from datetime import date
 from pathlib import Path
@@ -61,6 +62,7 @@ def main() -> None:
     JSON_PATH.write_text(json.dumps(domains, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {len(domains)} domains to {JSON_PATH}")
 
+    write_briefs(domains)
     write_sitemap(domains)
     write_robots()
 
@@ -71,6 +73,121 @@ def brief_slug(name: str) -> str:
 
 def brief_path_for(name: str) -> Path:
     return DOMAINS_DIR / f"{brief_slug(name)}.html"
+
+
+BRIEF_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{name} | SentioAurum Domain Brief</title>
+  <meta name="description" content="{meta_description}" />
+  <link rel="canonical" href="{canonical}" />
+
+  <meta property="og:title" content="{name} | SentioAurum Domain Brief" />
+  <meta property="og:description" content="{meta_description}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{canonical}" />
+  <meta property="og:image" content="{site}/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{name} | SentioAurum Domain Brief" />
+  <meta name="twitter:description" content="{meta_description}" />
+  <meta name="twitter:image" content="{site}/og-image.png" />
+
+  <link rel="stylesheet" href="../style.css" />
+
+  <script type="application/ld+json">
+{jsonld}
+  </script>
+</head>
+<body>
+  <main class="section">
+    <div class="container">
+      <article class="card" style="max-width:780px;margin:0 auto;">
+        <p class="eyebrow">{category}</p>
+        <h1>{name}</h1>
+        <p class="hero-copy">{description_html}</p>
+        <ul>
+          <li>Premium brand potential for operators and startups</li>
+          <li>Secure transfer via escrow workflow</li>
+          <li>Fast response for qualified acquisition inquiries</li>
+        </ul>
+        <div class="hero-actions">
+          <a class="btn" href="/#inquire">Inquire Now</a>
+          <a class="btn btn-ghost" href="/">Back to Homepage</a>
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
+"""
+
+
+def brief_description(item: dict) -> str:
+    desc = (item.get("description") or "").strip()
+    if desc:
+        return desc
+    return f"{item['name']} is part of the SentioAurum portfolio and available for acquisition via secure escrow transfer."
+
+
+def brief_meta_description(item: dict) -> str:
+    text = brief_description(item)
+    return text if len(text) <= 200 else text[:197].rstrip() + "..."
+
+
+def brief_jsonld(item: dict) -> str:
+    category = item.get("category") or "Portfolio Domain"
+    payload = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": item["name"],
+        "description": brief_description(item),
+        "category": category,
+        "brand": {"@type": "Brand", "name": "SentioAurum"},
+        "url": f"{SITE_ORIGIN}/domains/{brief_path_for(item['name']).name}",
+        "offers": {
+            "@type": "Offer",
+            "url": f"{SITE_ORIGIN}/#inquire",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "seller": {"@type": "Organization", "name": "SentioAurum"},
+        },
+    }
+    return json.dumps(payload, indent=2)
+
+
+def write_briefs(domains: list[dict]) -> None:
+    DOMAINS_DIR.mkdir(exist_ok=True)
+    expected_files: set[str] = set()
+
+    for item in domains:
+        path = brief_path_for(item["name"])
+        expected_files.add(path.name)
+        category = item.get("category") or "Portfolio Domain"
+        rendered = BRIEF_TEMPLATE.format(
+            name=html.escape(item["name"]),
+            category=html.escape(category),
+            description_html=html.escape(brief_description(item)),
+            meta_description=html.escape(brief_meta_description(item), quote=True),
+            canonical=f"{SITE_ORIGIN}/domains/{path.name}",
+            site=SITE_ORIGIN,
+            jsonld=brief_jsonld(item),
+        )
+        path.write_text(rendered, encoding="utf-8")
+
+    removed = 0
+    for existing in DOMAINS_DIR.glob("*.html"):
+        if existing.name not in expected_files:
+            existing.unlink()
+            removed += 1
+
+    print(f"Wrote {len(expected_files)} briefs to {DOMAINS_DIR}"
+          + (f" (removed {removed} stale)" if removed else ""))
 
 
 def write_sitemap(domains: list[dict]) -> None:

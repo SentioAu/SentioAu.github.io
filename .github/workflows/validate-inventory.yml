@@ -16,4 +16,11 @@ jobs:
       - name: Regenerate inventory artifacts
         run: python sync_domains.py
       - name: Ensure generated files are up to date
-        run: git diff --exit-code domains.json sitemap.xml robots.txt
+        run: git diff --exit-code domains.json sitemap.xml robots.txt domains/
+      - name: Ensure no stale brief files remain
+        run: |
+          if [ -n "$(git status --porcelain domains/)" ]; then
+            echo "Stale or missing brief files in domains/ — re-run python sync_domains.py"
+            git status --porcelain domains/
+            exit 1
+          fi

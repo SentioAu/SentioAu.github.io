@@ -21,17 +21,7 @@
 
     const optionMarkup = (domain) => `<option value="${domain}">${domain}</option>`;
 
-const DOMAIN_BRIEFS = {
-      'cryptoguide.ai': '/domains/cryptoguide-ai.html',
-      'snuggle.ai': '/domains/snuggle-ai.html',
-      'advantech.ai': '/domains/advantech-ai.html',
-      'hunted.ai': '/domains/hunted-ai.html',
-      'nub.ai': '/domains/nub-ai.html',
-      'dragonfall.com': '/domains/dragonfall-com.html',
-      'witchingly.com': '/domains/witchingly-com.html',
-      'chesscourse.com': '/domains/chesscourse-com.html',
-      'thehiveai.com': '/domains/thehiveai-com.html'
-    };
+    const briefUrlFor = (name) => `/domains/${name.toLowerCase().replace(/\./g, '-')}.html`;
 
     const weeklySeed = () => {
       const now = new Date();
@@ -177,10 +167,7 @@ const DOMAIN_BRIEFS = {
         const description = item.description && item.description.trim().length > 0
           ? item.description
           : `${item.name} is available in the SentioAurum portfolio.`;
-        const briefUrl = DOMAIN_BRIEFS[item.name.toLowerCase()];
-        const briefLink = briefUrl
-          ? `<a class="brief-link" data-domain="${item.name}" href="${briefUrl}">View domain brief →</a>`
-          : '';
+        const briefLink = `<a class="brief-link" data-domain="${item.name}" href="${briefUrlFor(item.name)}">View domain brief →</a>`;
         return `
           <article class="card domain-card">
             <h3>${item.name}</h3>
