@@ -395,4 +395,13 @@
       });
     });
 
+    const optionalDetails = document.getElementById('optionalDetails');
+    if (optionalDetails) {
+      optionalDetails.addEventListener('toggle', () => {
+        if (optionalDetails.open) {
+          trackEvent('form_optional_expand', { form_name: 'inquiry_form' });
+        }
+      });
+    }
+
     document.getElementById('year').textContent = new Date().getFullYear();
