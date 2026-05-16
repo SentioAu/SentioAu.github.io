@@ -16,7 +16,7 @@ ROBOTS_PATH = ROOT / "robots.txt"
 DOMAINS_DIR = ROOT / "domains"
 
 SITE_ORIGIN = "https://sentioaurum.com"
-STATIC_PAGES = ["/", "/thank-you.html"]
+STATIC_PAGES = ["/", "/thank-you.html", "/lease-to-own.html"]
 
 
 def parse_bool(value: str) -> bool:

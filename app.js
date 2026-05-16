@@ -413,4 +413,11 @@
       });
     }
 
+    const leaseInfoLink = document.getElementById('leaseInfoLink');
+    if (leaseInfoLink) {
+      leaseInfoLink.addEventListener('click', () => {
+        trackEvent('lease_info_click', { source_section: 'inquiry_form' });
+      });
+    }
+
     document.getElementById('year').textContent = new Date().getFullYear();

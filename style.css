@@ -492,6 +492,38 @@ h1 {
   transform: none;
 }
 
+.lto-steps {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--muted);
+}
+
+.lto-steps li {
+  margin-bottom: 10px;
+}
+
+.lto-steps strong {
+  color: var(--text);
+}
+
+.lease-link {
+  display: inline-block;
+  margin-top: -8px;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.lease-link::before {
+  content: '→ ';
+  color: var(--brand);
+}
+
+.lease-link:hover {
+  color: var(--brand);
+}
+
 .inquiry-form {
   padding: 20px;
   max-width: 720px;
