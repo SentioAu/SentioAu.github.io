@@ -86,6 +86,7 @@
         <div class="policy-strip" role="note">Serious offers only: inquiries below <strong>$2,500</strong> are typically not prioritized.</div>
 
         <div class="filter-row" id="filterRow" aria-label="Domain category filters"></div>
+        <div class="filter-row filter-row-secondary" id="tldRow" aria-label="Domain extension filters"></div>
 
         <div class="domain-grid" id="domainGrid" aria-live="polite"></div>
 
@@ -204,6 +205,16 @@
           </div>
         </div>
 
+        <div class="partner-strip" aria-label="Trusted transfer and listing partners">
+          <p class="partner-strip-label">Trusted rails</p>
+          <ul class="partner-list">
+            <li><a class="partner-badge" href="https://www.escrow.com" target="_blank" rel="noopener noreferrer">Escrow.com</a></li>
+            <li><a class="partner-badge" href="https://www.atom.com/domain-portfolio/giovannibb514/2793290" target="_blank" rel="noopener noreferrer">Atom.com</a></li>
+            <li><a class="partner-badge" href="https://dan.com" target="_blank" rel="noopener noreferrer">Dan.com</a></li>
+            <li><span class="partner-badge partner-badge-static">Sedo MLS</span></li>
+          </ul>
+        </div>
+
         <form class="inquiry-form" id="inquiryForm" action="https://formspree.io/f/xdannogb" method="POST">
           <input type="hidden" name="_next" value="https://sentioaurum.com/thank-you.html" />
           <input type="hidden" name="shortlist" id="shortlistInput" />
@@ -216,6 +227,11 @@
           </label>
 
           <label>
+            Your email
+            <input name="email" type="email" id="emailField" placeholder="you@company.com" required />
+          </label>
+
+          <label>
             Offer intent
             <select name="offer_intent" id="offerIntent" required>
               <option value="" selected disabled>Select intent</option>
@@ -224,65 +240,7 @@
               <option>Make offer</option>
             </select>
           </label>
-
-          <label>
-            Decision authority
-            <select name="decision_authority" required>
-              <option value="" selected disabled>Select authority</option>
-              <option>Founder / Owner</option>
-              <option>Marketing lead</option>
-              <option>Broker / Representative</option>
-              <option>Other</option>
-            </select>
-          </label>
-
-          <label>
-            Timeline to close
-            <select name="timeline_to_close" required>
-              <option value="" selected disabled>Select timeline</option>
-              <option>This week</option>
-              <option>Within 30 days</option>
-              <option>Within 90 days</option>
-              <option>Research phase</option>
-            </select>
-          </label>
-
-          <label>
-            Preferred contact method
-            <select name="preferred_contact" required>
-              <option value="" selected disabled>Select contact method</option>
-              <option>Email</option>
-              <option>Telegram</option>
-              <option>WhatsApp</option>
-            </select>
-          </label>
-
-          <label>
-            Your email
-            <input name="email" type="email" id="emailField" placeholder="you@company.com" required />
-          </label>
-
-          <label>
-            Company / project stage
-            <select name="project_stage" required>
-              <option value="" selected disabled>Select one</option>
-              <option>Idea / Pre-launch</option>
-              <option>MVP / Early users</option>
-              <option>Revenue stage</option>
-              <option>Funded startup / Enterprise</option>
-              <option>Agency / Domain investor</option>
-            </select>
-          </label>
-
-          <label>
-            LinkedIn or website (optional)
-            <input name="reference_url" type="url" placeholder="https://..." />
-          </label>
-
-          <label>
-            Intended use
-            <input name="use_case" type="text" placeholder="What are you building?" required />
-          </label>
+          <a class="lease-link" id="leaseInfoLink" href="/lease-to-own.html">How lease-to-own works</a>
 
           <label>
             Budget range (USD)
@@ -295,6 +253,65 @@
               <option>$25,000+</option>
             </select>
           </label>
+
+          <label>
+            Intended use
+            <input name="use_case" type="text" placeholder="What are you building?" required />
+          </label>
+
+          <details class="form-details" id="optionalDetails">
+            <summary>Add optional details <span class="form-details-hint">(helps us prioritize and respond faster)</span></summary>
+            <div class="form-details-body">
+              <label>
+                Decision authority
+                <select name="decision_authority">
+                  <option value="" selected>Select authority</option>
+                  <option>Founder / Owner</option>
+                  <option>Marketing lead</option>
+                  <option>Broker / Representative</option>
+                  <option>Other</option>
+                </select>
+              </label>
+
+              <label>
+                Timeline to close
+                <select name="timeline_to_close">
+                  <option value="" selected>Select timeline</option>
+                  <option>This week</option>
+                  <option>Within 30 days</option>
+                  <option>Within 90 days</option>
+                  <option>Research phase</option>
+                </select>
+              </label>
+
+              <label>
+                Preferred contact method
+                <select name="preferred_contact">
+                  <option value="" selected>Select contact method</option>
+                  <option>Email</option>
+                  <option>Telegram</option>
+                  <option>WhatsApp</option>
+                </select>
+              </label>
+
+              <label>
+                Company / project stage
+                <select name="project_stage">
+                  <option value="" selected>Select one</option>
+                  <option>Idea / Pre-launch</option>
+                  <option>MVP / Early users</option>
+                  <option>Revenue stage</option>
+                  <option>Funded startup / Enterprise</option>
+                  <option>Agency / Domain investor</option>
+                </select>
+              </label>
+
+              <label>
+                LinkedIn or website
+                <input name="reference_url" type="url" placeholder="https://..." />
+              </label>
+            </div>
+          </details>
 
           <label>
             Message (optional)
