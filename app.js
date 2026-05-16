@@ -376,6 +376,15 @@
       });
     });
 
+    document.querySelectorAll('.partner-badge[href]').forEach((link) => {
+      link.addEventListener('click', () => {
+        trackEvent('partner_click', {
+          partner: link.textContent.trim(),
+          destination: link.href
+        });
+      });
+    });
+
     inquiryForm.addEventListener('submit', () => {
       const missing = requiredFields.filter((field) => !field.value);
       if (missing.length > 0) {
