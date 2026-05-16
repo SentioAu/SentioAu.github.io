@@ -168,8 +168,11 @@
           ? item.description
           : `${item.name} is available in the SentioAurum portfolio.`;
         const briefLink = `<a class="brief-link" data-domain="${item.name}" href="${briefUrlFor(item.name)}">View domain brief →</a>`;
+        const category = item.category || 'Portfolio Domain';
+        const subcategory = item.subcategory ? `<span class="subcat-badge">${item.subcategory}</span>` : '';
         return `
           <article class="card domain-card">
+            <p class="card-eyebrow">${category}${subcategory}</p>
             <h3>${item.name}</h3>
             <p>${description}</p>
             ${briefLink}

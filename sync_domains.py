@@ -35,7 +35,7 @@ def main() -> None:
     seen = set()
     with CSV_PATH.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
-        required = {"name", "category", "description", "featured"}
+        required = {"name", "category", "subcategory", "description", "featured"}
         missing = required.difference(reader.fieldnames or [])
         if missing:
             raise ValueError(f"domains.csv missing required columns: {sorted(missing)}")
@@ -54,6 +54,7 @@ def main() -> None:
                 {
                     "name": name,
                     "category": (row.get("category") or "").strip(),
+                    "subcategory": (row.get("subcategory") or "").strip(),
                     "description": (row.get("description") or "").strip(),
                     "featured": parse_bool(row.get("featured") or "false"),
                 }
@@ -108,7 +109,7 @@ BRIEF_TEMPLATE = """<!DOCTYPE html>
   <main class="section">
     <div class="container">
       <article class="card" style="max-width:780px;margin:0 auto;">
-        <p class="eyebrow">{category}</p>
+        <p class="eyebrow">{category}{subcategory_badge}</p>
         <h1>{name}</h1>
         <p class="hero-copy">{description_html}</p>
         <ul>
@@ -142,12 +143,14 @@ def brief_meta_description(item: dict) -> str:
 
 def brief_jsonld(item: dict) -> str:
     category = item.get("category") or "Portfolio Domain"
+    subcategory = item.get("subcategory") or ""
+    category_label = f"{category} / {subcategory}" if subcategory else category
     payload = {
         "@context": "https://schema.org",
         "@type": "Product",
         "name": item["name"],
         "description": brief_description(item),
-        "category": category,
+        "category": category_label,
         "brand": {"@type": "Brand", "name": "SentioAurum"},
         "url": f"{SITE_ORIGIN}/domains/{brief_path_for(item['name']).name}",
         "offers": {
@@ -169,9 +172,16 @@ def write_briefs(domains: list[dict]) -> None:
         path = brief_path_for(item["name"])
         expected_files.add(path.name)
         category = item.get("category") or "Portfolio Domain"
+        subcategory = item.get("subcategory") or ""
+        subcategory_badge = (
+            f' <span class="subcat-badge">{html.escape(subcategory)}</span>'
+            if subcategory
+            else ""
+        )
         rendered = BRIEF_TEMPLATE.format(
             name=html.escape(item["name"]),
             category=html.escape(category),
+            subcategory_badge=subcategory_badge,
             description_html=html.escape(brief_description(item)),
             meta_description=html.escape(brief_meta_description(item), quote=True),
             canonical=f"{SITE_ORIGIN}/domains/{path.name}",
