@@ -1,5 +1,6 @@
     const domainGrid = document.getElementById('domainGrid');
     const filterRow = document.getElementById('filterRow');
+    const tldRow = document.getElementById('tldRow');
     const domainField = document.getElementById('domainField');
     const domainPicker = document.getElementById('domainPicker');
     const domainSearch = document.getElementById('domainSearch');
@@ -48,9 +49,17 @@
 
     const shortlist = new Set(JSON.parse(localStorage.getItem('sentio_shortlist') || '[]'));
     let activeCategory = 'All';
+    let activeTld = 'All';
     let activeQuery = '';
     let allDomains = [];
     const MAX_GRID_RESULTS = 12;
+    const TLD_MIN_COUNT = 2;
+
+    const tldOf = (name) => {
+      const parts = name.toLowerCase().split('.');
+      if (parts.length < 2) return '';
+      return '.' + parts.slice(1).join('.');
+    };
 
     const debounce = (callback, delay = 180) => {
       let timeoutId;
@@ -74,29 +83,54 @@
       }
 
       const trimmed = query.trim();
-      const categoryLabel = activeCategory !== 'All' ? ` in ${activeCategory}` : '';
+      const filterParts = [];
+      if (activeCategory !== 'All') filterParts.push(activeCategory);
+      if (activeTld !== 'All') filterParts.push(activeTld);
+      const scope = filterParts.length ? ` in ${filterParts.join(' / ')}` : '';
 
       if (!trimmed) {
-        domainSearchHint.textContent = activeCategory !== 'All'
-          ? `Showing ${visibleCount} domain${visibleCount === 1 ? '' : 's'}${categoryLabel}.`
+        domainSearchHint.textContent = filterParts.length
+          ? `Showing ${visibleCount} domain${visibleCount === 1 ? '' : 's'}${scope}.`
           : `Showing all ${allDomains.length} domains.`;
         return;
       }
 
       domainSearchHint.textContent = visibleCount === 0
-        ? `No matches for "${trimmed}"${categoryLabel}.`
-        : `Showing ${visibleCount} match${visibleCount === 1 ? '' : 'es'} for "${trimmed}"${categoryLabel}.`;
+        ? `No matches for "${trimmed}"${scope}.`
+        : `Showing ${visibleCount} match${visibleCount === 1 ? '' : 'es'} for "${trimmed}"${scope}.`;
     };
 
     const makeCategoryButton = (category) => `
       <button class="filter-chip${category === activeCategory ? ' is-active' : ''}" type="button" data-category="${category}">${category}</button>
     `;
 
+    const popularTlds = () => {
+      const counts = new Map();
+      for (const item of allDomains) {
+        const t = tldOf(item.name);
+        counts.set(t, (counts.get(t) || 0) + 1);
+      }
+      return [...counts.entries()]
+        .filter(([, n]) => n >= TLD_MIN_COUNT)
+        .sort((a, b) => b[1] - a[1])
+        .map(([t]) => t);
+    };
+
+    const matchesTldFilter = (name) => {
+      if (activeTld === 'All') return true;
+      const t = tldOf(name);
+      if (activeTld === 'Other') {
+        return !popularTlds().includes(t);
+      }
+      return t === activeTld;
+    };
+
     const getFilteredDomains = () => {
       const q = activeQuery.trim().toLowerCase();
       return allDomains.filter((item) => {
         const matchesCategory = activeCategory === 'All' || (item.category || 'Portfolio Domain') === activeCategory;
         if (!matchesCategory) return false;
+        if (!matchesTldFilter(item.name)) return false;
         if (!q) return true;
         return item.name.toLowerCase().includes(q);
       });
@@ -215,9 +249,30 @@
       });
     };
 
+    const makeTldButton = (label) => `
+      <button class="filter-chip${label === activeTld ? ' is-active' : ''}" type="button" data-tld="${label}">${label}</button>
+    `;
+
+    const renderTldFilters = () => {
+      if (!tldRow) return;
+      const popular = popularTlds();
+      const hasOther = allDomains.some((item) => !popular.includes(tldOf(item.name)));
+      const labels = ['All', ...popular, ...(hasOther ? ['Other'] : [])];
+      tldRow.innerHTML = labels.map((label) => makeTldButton(label)).join('');
+
+      tldRow.querySelectorAll('button[data-tld]').forEach((button) => {
+        button.addEventListener('click', () => {
+          activeTld = button.getAttribute('data-tld');
+          renderAll();
+          trackEvent('domain_tld_select', { tld: activeTld });
+        });
+      });
+    };
+
     const renderAll = () => {
       const filtered = getFilteredDomains();
       renderFilters();
+      renderTldFilters();
       renderFeaturedDomains();
       populateDomainOptions(filtered);
     };

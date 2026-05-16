@@ -195,7 +195,17 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 12px 0 16px;
+  margin: 12px 0 8px;
+}
+
+.filter-row-secondary {
+  margin: 0 0 16px;
+  opacity: 0.92;
+}
+
+.filter-row-secondary .filter-chip {
+  font-size: 0.78rem;
+  padding: 5px 10px;
 }
 
 .filter-chip {
