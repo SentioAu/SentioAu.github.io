@@ -48,7 +48,9 @@
 
     const shortlist = new Set(JSON.parse(localStorage.getItem('sentio_shortlist') || '[]'));
     let activeCategory = 'All';
+    let activeQuery = '';
     let allDomains = [];
+    const MAX_GRID_RESULTS = 12;
 
     const debounce = (callback, delay = 180) => {
       let timeoutId;
@@ -72,14 +74,18 @@
       }
 
       const trimmed = query.trim();
+      const categoryLabel = activeCategory !== 'All' ? ` in ${activeCategory}` : '';
+
       if (!trimmed) {
-        domainSearchHint.textContent = `Showing all ${allDomains.length} domains.`;
+        domainSearchHint.textContent = activeCategory !== 'All'
+          ? `Showing ${visibleCount} domain${visibleCount === 1 ? '' : 's'}${categoryLabel}.`
+          : `Showing all ${allDomains.length} domains.`;
         return;
       }
 
       domainSearchHint.textContent = visibleCount === 0
-        ? `No matches for "${trimmed}".`
-        : `Showing ${visibleCount} match${visibleCount === 1 ? '' : 'es'} for "${trimmed}".`;
+        ? `No matches for "${trimmed}"${categoryLabel}.`
+        : `Showing ${visibleCount} match${visibleCount === 1 ? '' : 'es'} for "${trimmed}"${categoryLabel}.`;
     };
 
     const makeCategoryButton = (category) => `
@@ -87,27 +93,23 @@
     `;
 
     const getFilteredDomains = () => {
-      if (activeCategory === 'All') {
-        return allDomains;
-      }
-      return allDomains.filter((item) => (item.category || 'Portfolio Domain') === activeCategory);
+      const q = activeQuery.trim().toLowerCase();
+      return allDomains.filter((item) => {
+        const matchesCategory = activeCategory === 'All' || (item.category || 'Portfolio Domain') === activeCategory;
+        if (!matchesCategory) return false;
+        if (!q) return true;
+        return item.name.toLowerCase().includes(q);
+      });
     };
 
 
-    const populateDomainOptions = (domains, filterTerm = '') => {
-      const q = filterTerm.trim().toLowerCase();
-      const visible = q ? domains.filter((item) => item.name.toLowerCase().includes(q)) : domains;
+    const populateDomainOptions = (visible) => {
       const options = visible.map((item) => optionMarkup(item.name)).join('');
-
       domainField.innerHTML = '<option value="" selected disabled>Select a domain</option>';
       domainPicker.innerHTML = '<option value="" selected>Select a domain</option>';
       domainField.insertAdjacentHTML('beforeend', options);
       domainPicker.insertAdjacentHTML('beforeend', options);
-      updateSearchHint(visible.length, filterTerm);
-
-      if (q.length > 0) {
-        trackEvent('domain_search', { query_length: q.length, results_count: visible.length });
-      }
+      updateSearchHint(visible.length, activeQuery);
     };
 
     const attachCardEvents = () => {
@@ -158,10 +160,23 @@
       return ordered.slice(0, 4);
     };
 
+    const pickGridDomains = (filtered) => {
+      const isSearching = activeQuery.trim().length > 0;
+      if (isSearching) {
+        return filtered.slice(0, MAX_GRID_RESULTS);
+      }
+      return pickFeaturedSet(filtered.length > 0 ? filtered : allDomains);
+    };
+
     const renderFeaturedDomains = () => {
       const filtered = getFilteredDomains();
-      const source = filtered.length > 0 ? filtered : allDomains;
-      const rotatedDomains = pickFeaturedSet(source);
+      const rotatedDomains = pickGridDomains(filtered);
+
+      if (rotatedDomains.length === 0) {
+        domainGrid.innerHTML = `<article class="card domain-card"><h3>No matches</h3><p>No domains match the current filter. Try a different category or clear your search.</p></article>`;
+        attachCardEvents();
+        return;
+      }
 
       domainGrid.innerHTML = rotatedDomains.map((item) => {
         const description = item.description && item.description.trim().length > 0
@@ -194,11 +209,17 @@
       filterRow.querySelectorAll('button[data-category]').forEach((button) => {
         button.addEventListener('click', () => {
           activeCategory = button.getAttribute('data-category');
-          renderFilters();
-          renderFeaturedDomains();
+          renderAll();
           trackEvent('domain_filter_select', { category: activeCategory });
         });
       });
+    };
+
+    const renderAll = () => {
+      const filtered = getFilteredDomains();
+      renderFilters();
+      renderFeaturedDomains();
+      populateDomainOptions(filtered);
     };
 
     const requiredFields = [domainField, offerIntent, budgetField, emailField];
@@ -219,9 +240,7 @@
       .then((response) => response.json())
       .then((domains) => {
         allDomains = domains;
-        populateDomainOptions(domains);
-        renderFilters();
-        renderFeaturedDomains();
+        renderAll();
       })
       .catch(() => {
         domainGrid.innerHTML = '<article class="card domain-card"><h3>Domain list unavailable</h3><p>Please use the full Atom portfolio link while we refresh inventory sync.</p></article>';
@@ -251,7 +270,17 @@
     });
 
     const debouncedDomainSearch = debounce(() => {
-      populateDomainOptions(allDomains, domainSearch.value);
+      const previous = activeQuery;
+      activeQuery = domainSearch.value;
+      renderAll();
+      const q = activeQuery.trim();
+      if (q.length > 0 && q !== previous.trim()) {
+        trackEvent('domain_search', {
+          query_length: q.length,
+          results_count: getFilteredDomains().length,
+          category_filter: activeCategory
+        });
+      }
     });
 
     domainSearch.addEventListener('input', debouncedDomainSearch);
