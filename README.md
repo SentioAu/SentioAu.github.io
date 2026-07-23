@@ -1,53 +1,56 @@
-# sentioaurum.github.io
+# SentioAurum
 
-SentioAurum official site.
+The official site for **SentioAurum** — an independent studio building a small
+network of web tools. *Sentio Aurum* — "to sense gold."
 
-## Domain inventory workflow
+The site is intentionally minimal: one statement, and an editorial index that
+routes visitors out to the studio's live products (the "Network").
 
-The site uses `domains.json` as the single source of truth for the homepage domain cards and dropdown selectors.
+## Structure
 
-### Update domains quickly
+| File | Purpose |
+| --- | --- |
+| `index.html` | The single-page studio landing. |
+| `style.css` | All styling — atmospheric dark theme, gold accents, editorial index. |
+| `app.js` | Tiny: entrance reveal, footer year, network click analytics. |
+| `favicon.svg` | Gold "SA" monogram. |
+| `og-image.png` | Social preview (1200×630). Regenerate with `python build_og_image.py`. |
+| `sitemap.xml`, `robots.txt` | SEO. |
 
-1. Edit `domains.csv`.
-2. Run:
-   ```bash
-   python sync_domains.py
-   ```
-3. Commit both updated files (`domains.csv` and `domains.json`).
+## The Network
 
-This keeps the portfolio list synchronized without manually editing `index.html`.
+Products are hard-coded in `index.html` (the `.index-list`). To add one, copy an
+`<li>` row, bump the number, and set the name / note / URL. Keep the roster small
+— that's the point.
 
+Current: EmpireCalc · AlHasebah · MorseCodeGenerator · EspressoFit (+ PlayersB).
 
-## Frontend script structure
+## Analytics
 
-- `app.js` contains all client-side behavior (domain fetch/render, filters, shortlist, and analytics events).
-- `index.html` includes only page markup + GA loader and defers `app.js` for execution.
+Google Analytics (GA4) `G-VBQJ0Q5J39` is loaded in `index.html`. Outbound clicks
+to network products fire a `network_click` event.
 
-### Data validation
+## Contact
 
-- `sync_domains.py` validates required columns, detects duplicate domains, and rejects invalid domain-like values before writing `domains.json`.
+The site links to `studio@sentioaurum.com` (top bar + footer). Point that mailbox
+at your inbox (or change the two `mailto:` links in `index.html`).
 
+## Deploy — Cloudflare Pages
 
-## Dedicated domain briefs
+Static site, no build step. From the project root:
 
-- Brief pages in `domains/` are generated for every entry in `domains.csv` by `sync_domains.py`. Each page includes JSON-LD `Product` + `Offer` schema for SEO indexing.
-- Slug pattern is `name.lower().replace('.', '-') + '.html'` (e.g. `cryptoguide-ai.html`). The homepage derives this URL on the fly via `briefUrlFor` in `app.js` — no manual mapping needed.
-- Stale brief files (i.e. ones whose domain no longer appears in the CSV) are deleted automatically on the next `python sync_domains.py` run, and CI fails if `domains/` is out-of-sync with the CSV.
+```bash
+npx wrangler pages deploy
+```
 
+`wrangler.toml` sets `pages_build_output_dir = "."`, so no directory argument is
+needed. `.assetsignore` keeps source/tooling files out of the upload; `_headers`
+sets security + cache headers.
 
-### Metadata quality (Phase C)
+First-time setup: `npx wrangler login`, then run the deploy. Configure the custom
+domain `sentioaurum.com` in the Cloudflare Pages dashboard.
 
-- Keep `category` and `description` populated for high-priority domains to improve featured-card quality and filtering relevance.
-- Use concise, buyer-focused descriptions (1 sentence) optimized for conversion intent.
+## Note
 
-
-## CI inventory guardrail
-
-- GitHub Actions workflow `validate-inventory.yml` regenerates `domains.json`, `sitemap.xml`, and `robots.txt`, then fails if any of them are out-of-sync with `domains.csv` or the contents of `domains/`.
-- This prevents stale inventory JSON or stale SEO artifacts from being merged.
-
-## SEO artifacts
-
-- `sitemap.xml` is generated from `domains.csv` and includes the homepage, `thank-you.html`, and every brief page under `domains/` (one per CSV row).
-- `robots.txt` references the sitemap at `https://sentioaurum.com/sitemap.xml`.
-- `og-image.png` is the canonical social preview asset (1200×630). Re-render with `python build_og_image.py` if the design changes.
+The former domain-portfolio / marketplace has been retired from the live site and
+preserved in git history — it can be reintroduced later once traffic grows.

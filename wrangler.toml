@@ -1,0 +1,8 @@
+# Cloudflare Pages configuration for SentioAurum
+# Deploy from the project root with:
+#   npx wrangler pages deploy
+# (pages_build_output_dir below lets you omit the directory argument)
+
+name = "sentioaurum"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "."
