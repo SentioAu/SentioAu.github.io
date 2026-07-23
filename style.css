@@ -160,10 +160,13 @@ a { color: inherit; text-decoration: none; }
 
 .sub {
   margin: 34px 0 0;
-  max-width: 30ch;
-  font-size: clamp(1rem, 1.5vw, 1.18rem);
+  max-width: 32ch;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  line-height: 1.4;
+  letter-spacing: -0.005em;
   color: var(--muted);
-  font-weight: 400;
 }
 
 /* ---------- Network index ---------- */
@@ -235,9 +238,14 @@ a { color: inherit; text-decoration: none; }
 .row-note {
   justify-self: end;
   text-align: right;
-  font-size: 0.86rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
   color: var(--muted);
+  transition: color 0.4s ease;
 }
+.index-row:hover .row-note { color: var(--text); }
 
 .row-go {
   font-size: 1rem;
@@ -248,10 +256,11 @@ a { color: inherit; text-decoration: none; }
 .index-row:hover .row-go { color: var(--gold); transform: translate(2px, -2px); }
 
 .index-more {
-  margin: 26px 0 0;
-  font-size: 0.86rem;
+  margin: 28px 0 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1rem;
   color: var(--muted-2);
-  letter-spacing: 0.02em;
 }
 .index-more a {
   color: var(--muted);
