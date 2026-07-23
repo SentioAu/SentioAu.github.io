@@ -12,9 +12,12 @@ routes visitors out to the studio's live products (the "Network").
 | --- | --- |
 | `index.html` | The single-page studio landing. |
 | `style.css` | All styling — atmospheric dark theme, gold accents, editorial index. |
-| `app.js` | Tiny: entrance reveal, footer year, network click analytics. |
-| `favicon.svg` | Gold "SA" monogram. |
+| `app.js` | Tiny: entrance reveal, footer year, network + mailto analytics. |
+| `404.html` | Branded not-found page (retired URLs also 301 via `_redirects`). |
+| `favicon.svg` | Gold "SA" monogram (source of the PNG icons). |
+| `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `site.webmanifest` | App icons + PWA manifest. Regenerate icons with `python build_icons.py`. |
 | `og-image.png` | Social preview (1200×630). Regenerate with `python build_og_image.py`. |
+| `_headers`, `_redirects` | Cloudflare security/cache headers + redirects for retired paths. |
 | `sitemap.xml`, `robots.txt` | SEO. |
 
 ## The Network

@@ -36,6 +36,13 @@ body {
 a { color: inherit; text-decoration: none; }
 ::selection { background: rgba(216, 178, 95, 0.26); color: #fff; }
 
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.index-row:focus-visible { outline-offset: -2px; }
+
 /* ---------- Atmosphere: drifting gold aura + film grain ---------- */
 .aura {
   position: fixed;

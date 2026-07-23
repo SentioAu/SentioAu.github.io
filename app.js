@@ -23,4 +23,13 @@
       }
     });
   });
+
+  // Measure enquiry (mailto) clicks.
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (typeof gtag === 'function') {
+        gtag('event', 'contact_click', { method: 'email' });
+      }
+    });
+  });
 })();

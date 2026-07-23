@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Not found — SentioAurum</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0a0a0b" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="aura" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="wordmark" href="/">
+      <span class="wordmark-mark" aria-hidden="true">SA</span>
+      <span class="wordmark-text">SENTIOAURUM</span>
+    </a>
+    <a class="top-contact" href="mailto:studio@sentioaurum.com">Enquiries</a>
+  </header>
+
+  <main class="stage">
+    <section class="lede">
+      <p class="kicker">404 &mdash; Nothing here</p>
+      <h1 class="statement">
+        <span>Lost the</span>
+        <span><em>thread.</em></span>
+      </h1>
+      <p class="sub">This page doesn't exist &mdash; but the studio does.</p>
+      <p class="index-more"><a href="/">Return to SentioAurum &rarr;</a></p>
+    </section>
+  </main>
+
+  <footer class="base">
+    <p>© <span id="year"></span> SentioAurum</p>
+    <p class="base-motto">An eye for gold.</p>
+    <p><a href="mailto:studio@sentioaurum.com">studio@sentioaurum.com</a></p>
+  </footer>
+
+  <script>
+    document.body.classList.add('ready');
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

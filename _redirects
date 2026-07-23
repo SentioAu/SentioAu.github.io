@@ -1,0 +1,7 @@
+# Cloudflare Pages redirects — retire the former domain marketplace.
+# https://developers.cloudflare.com/pages/configuration/redirects/
+/domains/*          /   301
+/lease-to-own.html  /   301
+/lease-to-own       /   301
+/thank-you.html     /   301
+/thank-you          /   301

@@ -6,4 +6,4 @@ README.md
 wrangler.toml
 .assetsignore
 build_og_image.py
-og-image.svg
+build_icons.py
