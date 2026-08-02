@@ -26,7 +26,8 @@ Products are hard-coded in `index.html` (the `.index-list`). To add one, copy an
 `<li>` row, bump the number, and set the name / note / URL. Keep the roster small
 — that's the point.
 
-Current: EmpireCalc · AlHasebah · MorseCodeGenerator · EspressoFit (+ PlayersB).
+Current: EmpireCalc · AlHasebah · MorseCodeGenerator · EspressoFit · BrailleChart (+ PlayersB).
+Remember to bump the `.index-count` label ("Five live products") when the roster changes.
 
 ## Analytics
 
